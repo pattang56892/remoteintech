@@ -3,5 +3,5 @@ services:
   remote-jobs:
     build: .
     ports:
-      - "3001:8080"
+      - "8085:8080"
     container_name: remote-jobs-app
