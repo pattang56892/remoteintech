@@ -66,17 +66,21 @@ process.on( 'unhandledRejection', err => {
  * Perform an HTTP request to a URL and return the request body.
  */
 async function request( url ) {
+	// Resolve relative URLs against the base URL
+	const baseUrl = 'https://blog.remoteintech.company/';
+	const fullUrl = url.startsWith('/') ? new URL(url, baseUrl).href : url;
+	
 	console.log(
 		'Requesting URL "%s"',
-		url.length > 70
-			? url.substring( 0, 67 ) + '...'
-			: url
+		fullUrl.length > 70
+			? fullUrl.substring( 0, 67 ) + '...'
+			: fullUrl
 	);
-	const res = await phin.promisified( url );
+	const res = await phin.promisified( fullUrl );
 	if ( res.statusCode !== 200 ) {
 		throw new Error(
 			'HTTP response code ' + res.statusCode
-			+ ' for URL: ' + url
+			+ ' for URL: ' + fullUrl
 		);
 	}
 	return res.body.toString();
